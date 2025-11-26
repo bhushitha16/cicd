@@ -7,6 +7,7 @@ pipeline {
     }
 
     stages {
+
         stage('Checkout Code') {
             steps {
                 git branch: 'main',
@@ -19,15 +20,18 @@ pipeline {
                 sh '''
                     python3 -m venv venv
                     . venv/bin/activate
+                    pip install --upgrade pip
                     pip install -r requirements.txt
                 '''
             }
         }
 
-
         stage('Run Tests') {
             steps {
-                sh 'pytest'
+                sh '''
+                    . venv/bin/activate
+                    pytest
+                '''
             }
         }
 
@@ -39,8 +43,10 @@ pipeline {
 
         stage('Push Docker Image to DockerHub') {
             steps {
-                sh "echo $DOCKERHUB_PSW | docker login -u $DOCKERHUB_USR --password-stdin"
-                sh "docker push ${IMAGE_NAME}:latest"
+                sh '''
+                    echo $DOCKERHUB_PSW | docker login -u $DOCKERHUB_USR --password-stdin
+                    docker push ${IMAGE_NAME}:latest
+                '''
             }
         }
     }
@@ -54,4 +60,3 @@ pipeline {
         }
     }
 }
-
