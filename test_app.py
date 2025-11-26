@@ -1,13 +1,13 @@
-from app import app
+from calculator import add, subtract, multiply, divide
 
-def test_home():
-    client = app.test_client()
-    res = client.get("/")
-    assert res.status_code == 200
-    assert res.json["message"] == "Python CI/CD Demo API is running!"
+def test_add():
+    assert add(2, 3) == 5
 
-def test_greet():
-    client = app.test_client()
-    res = client.get("/hello/Pratham")
-    assert res.status_code == 200
-    assert res.json["greeting"] == "Hello, Pratham!"
+def test_subtract():
+    assert subtract(5, 2) == 3
+
+def test_multiply():
+    assert multiply(4, 3) == 12
+
+def test_divide():
+    assert divide(10, 2) == 5
