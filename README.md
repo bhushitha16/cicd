@@ -1,2 +1,2 @@
 # cicd
-https://hub.docker.com/repository/docker/bhushitha16/calculator-app/general
+http://hub.docker.com/r/bhushitha16/calculator-app
