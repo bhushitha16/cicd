@@ -35,6 +35,14 @@ pipeline {
             }
         }
 
+        stage('Docker Login') {
+            steps {
+                sh '''
+                    echo $DOCKERHUB_PSW | docker login -u $DOCKERHUB_USR --password-stdin
+                '''
+            }
+        }
+
         stage('Build Docker Image') {
             steps {
                 sh "docker build -t ${IMAGE_NAME}:latest ."
@@ -43,17 +51,14 @@ pipeline {
 
         stage('Push Docker Image to DockerHub') {
             steps {
-                sh '''
-                    echo $DOCKERHUB_PSW | docker login -u $DOCKERHUB_USR --password-stdin
-                    docker push ${IMAGE_NAME}:latest
-                '''
+                sh "docker push ${IMAGE_NAME}:latest"
             }
         }
     }
 
     post {
         success {
-            echo "CI/CD completed — Docker image pushed to DockerHub!"
+            echo "CI/CD completed — Docker image pushed to DockerHub! 🎉"
         }
         failure {
             echo "Build failed — check console logs."
